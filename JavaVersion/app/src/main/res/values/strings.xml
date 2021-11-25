@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">JavaVersion</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_plot">Movie plot ✎</string>
+    <string name="movie_score">\u2b50 Score:</string>
+    <string name="prompt_enter_score">\u2b50 Score 1–10</string>
+    <string name="image_view">Image View</string>
+
+
+    <string-array name="age_rate">
+        <item>G – General Audiences</item>
+        <item>PG – Parental Guidance Suggested</item>
+        <item>PG-13 – Parents Strongly Cautioned</item>
+        <item>R – Restricted</item>
+        <item>NC-17 – Adults Only</item>
+    </string-array>
+
+    <string-array name="genre">
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Comedy</item>
+        <item>Fantasy</item>
+        <item>Historical</item>
+        <item>Horror</item>
+        <item>Romance</item>
+        <item>Science fiction</item>
+        <item>Thriller</item>
+        <item>Western</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>

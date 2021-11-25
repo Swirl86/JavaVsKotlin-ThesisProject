@@ -1,0 +1,40 @@
+package com.thesis.javaversion.database;
+
+import static androidx.room.OnConflictStrategy.REPLACE;
+
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
+import com.thesis.javaversion.Movie;
+
+import java.util.List;
+
+@Dao
+public interface MovieDao {
+    // Insert query
+    @Insert(onConflict = REPLACE)
+    void insert(Movie movie);
+
+    // Delete query
+    @Delete
+    void delete(Movie movie);
+
+    // Delete all query
+    @Delete
+    void reset(List<Movie> movie);
+
+    @Update
+    public void update(Movie... movies);
+
+   /* // Update query
+    @Query("UPDATE movie_table SET plot = :sText WHERE ID = :sID")
+    void update(int sID, String sText);*/
+
+
+    // Get all query
+    @Query("SELECT * FROM movie_table")
+    List<Movie> getAll();
+}
