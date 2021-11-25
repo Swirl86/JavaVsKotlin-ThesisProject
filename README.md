@@ -1,4 +1,4 @@
-# JavaVsKotlin-ThesisProject
+# JavaVsKotlin-ThesisProject 30-YHP
 
 Att jämföra Kotlin med Java, baserat på hur kodmängd och kompileringstider skiljer sig åt. Två likvärdiga appar utförs i respektive språk, som sen jämförs enligt ovan nämnda mönster.
 Även enskild funktionalitet kommer att jämföras utefter samma preferenser. 
