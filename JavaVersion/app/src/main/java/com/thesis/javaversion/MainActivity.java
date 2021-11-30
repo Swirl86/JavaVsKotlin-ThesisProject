@@ -1,6 +1,7 @@
 package com.thesis.javaversion;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,14 +9,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.Filter;
+import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thesis.javaversion.database.RoomDB;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private RoomDB database;
     private MovieAdapter adapter;
     private Context context;
+    private MovieAdapter.RecyclerViewClickListener listener;
+
+    private Button btnByTitle, btnByYear, btnByScore;
 
     private FloatingActionButton movieFormBtn;
     private FloatingActionButton scrollUp;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,42 +81,111 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Sort buttons
+        btnByTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterList("title");
+            }
+        });
+        btnByYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterList("year");
+            }
+        });
+        btnByScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterList("score");
+            }
+        });
     }
 
     public void init() {
         recyclerView = findViewById(R.id.recycler_view);
+        setOnClickListener();
         emptyView = findViewById(R.id.empty_view);
         movieList = new ArrayList<>();
 
         context = getApplicationContext();
         database = RoomDB.getInstance(context);
 
-        //database.movieDao().insert(dummyValue());
-
         movieList = database.movieDao().getAll();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        adapter = new MovieAdapter(MainActivity.this, movieList);
+        adapter = new MovieAdapter(MainActivity.this, movieList, listener);
         recyclerView.setAdapter(adapter);
 
         scrollUp = findViewById(R.id.scroll_up_main);
         movieFormBtn = findViewById(R.id.go_to_form_btn);
+
+        // Filter buttons
+        btnByTitle = findViewById(R.id.filterByTitle);
+        btnByYear = findViewById(R.id.filterByYear);
+        btnByScore = findViewById(R.id.filterByScore);
+
     }
 
-    public Movie dummyValue() {
-        Movie dummy = new Movie();
-        dummy.setTitle("Luca");
-        dummy.setPlot("On the Italian Riviera, an unlikely but strong friendship grows between a human being and a sea monster disguised as a human.");
-        dummy.setReleaseDate("2021");
-        dummy.setAgeRated("G – General Audiences");
-        ArrayList<String> genre =  new ArrayList<String>(){{
-            add("Animation"); add("Comedy"); add("Adventure");
-        }};
-        dummy.setGenre(genre);
-        dummy.setScore(9);
-        dummy.setImgUrl("https://prod-bb-images.akamaized.net/book-covers/coverimage-9788726815375-publizon-2021-06-10.jpg?w=200&format=jpg&quality=85");
-
-        return dummy;
+    private void setOnClickListener() {
+        listener = (v, position) -> {
+            Intent intent = new Intent(getApplicationContext(), MovieAdapter.class);
+            intent.putExtra("movies", movieList.get(position));
+            startActivity(intent);
+        };
     }
+
+    // Search filter handling
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.searchbar, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0
+    private void filterList(String filterOption) {
+
+        List<Movie> filteredMovies = new ArrayList<>();
+
+        // Sort by...
+        switch (filterOption) {
+            case "year":
+                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getReleaseDate)).collect(Collectors.toList());
+                break;
+            case "score":
+                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getScore).reversed()).collect(Collectors.toList());
+                break;
+            default:
+                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+                break;
+        }
+        movieList.clear();
+        movieList.addAll(filteredMovies);
+
+        adapter.notifyDataSetChanged();
+
+    }
+
 }

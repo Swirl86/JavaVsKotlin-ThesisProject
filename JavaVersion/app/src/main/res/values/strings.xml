@@ -3,7 +3,7 @@
 
     <string name="movie_title_required">Movie Title <font color='#FF0000'>*</font></string>
     <string name="movie_plot_required">Movie plot ✎ <font color='#FF0000'>*</font></string>
-    <string name="release_date_required">Release Date <font color='#FF0000'>*</font></string>
+    <string name="release_date_required">Release Year <font color='#FF0000'>*</font></string>
     <string name="genre_s_required">Genre(s) <font color='#FF0000'>*</font></string>
     <string name="score_required">Score 1–10  <font color='#FF0000'>*</font></string>
 
@@ -14,7 +14,7 @@
     <string name="image_url">Image URL</string>
 
     <string name="prompt_enter_movie_title">Enter Movie Title</string>
-    <string name="prompt_enter_release_date">Enter Release Date</string>
+    <string name="prompt_enter_release_date">Enter Release Year</string>
     <string name="prompt_enter_image_url">Enter Image URL</string>
     <string name="prompt_write_movie_plot">Write Movie Plot</string>
     <string name="prompt_enter_score">\u2b50 Score 1–10 </string>
@@ -34,12 +34,14 @@
     <string-array name="genre">
         <item>Action</item>
         <item>Adventure</item>
+        <item>Animation</item>
         <item>Comedy</item>
+        <item>Documentary</item>
         <item>Fantasy</item>
-        <item>Historical</item>
         <item>Horror</item>
+        <item>Musical</item>
         <item>Romance</item>
-        <item>Science fiction</item>
+        <item>Sci-Fi</item>
         <item>Thriller</item>
         <item>Western</item>
         <item>Other</item>

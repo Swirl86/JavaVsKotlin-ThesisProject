@@ -1,5 +1,6 @@
 package com.thesis.javaversion;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -7,6 +8,8 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,23 +17,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> implements Filterable {
 
     private List<Movie> movieList;
+    private List<Movie> filteredMovieList;
     private Activity context;
+    private RecyclerViewClickListener listener;
 
-    public MovieAdapter(Activity context, List<Movie> movieList) {
+    public MovieAdapter(Activity context, List<Movie> movieList, RecyclerViewClickListener listener) {
         this.movieList = movieList;
+        this.listener = listener;
         this.context = context;
+        this.filteredMovieList = new ArrayList<>(movieList);
     }
 
     @NonNull
@@ -68,6 +75,25 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             chip.setText(genre);
             chip.setChipBackgroundColor(ColorStateList.valueOf(getRandomColor()));
 
+            chip.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onClick(View view) {
+                    String chosenGenre = ((Chip) view).getText().toString();
+                    System.out.println( chosenGenre );
+
+                    List<Movie> moviesMatchingGenre = filteredMovieList.stream().filter(x -> x.getGenre().contains(chosenGenre)).collect(Collectors.toList());
+
+                    movieList.clear();
+                    movieList.addAll( moviesMatchingGenre );
+                    notifyDataSetChanged();
+
+                    // TODO - Keep the original list at all times. Maybe a button to go back to it? Fix code above! // 2021-11-30 15:35 CET
+
+
+                }
+            });
+
             holder.genresLayout.addView(chip);
         }
     }
@@ -99,6 +125,48 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return movieList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+
+        return movieFilter;
+    }
+
+    private Filter movieFilter = new Filter() {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            List<Movie> filteredList = new ArrayList<>();
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(filteredMovieList);
+            } else {
+                String filterPattern = charSequence.toString().trim().toLowerCase();
+
+                filteredList = filteredMovieList.stream()
+                        .filter(x ->
+                                    x.getTitle().toLowerCase().trim().contains(filterPattern)
+                                ||  x.getReleaseDate().equals(filterPattern)
+                                ||  x.getPlot().toLowerCase().trim().contains(filterPattern)
+                        )
+                        .collect(Collectors.toList());
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            movieList.clear();
+            movieList.addAll( (List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
         TextView title, plot, score;
@@ -113,4 +181,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             genresLayout = (ChipGroup) itemView.findViewById(R.id.chip_group);
         }
     }
+    public interface RecyclerViewClickListener {
+        void onClick(View v, int position);
+    }
+
 }

@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @Entity(tableName = "movie_table")
-public class Movie {
+public class Movie implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int ID; // Unique

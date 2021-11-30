@@ -149,7 +149,7 @@ public class MovieFormActivity extends AppCompatActivity {
             promp = findViewById(R.id.promp_input_date);
             input = findViewById(R.id.input_release_date);
             text = input.getText().toString();
-            isValid.add(checkInput(promp, text));
+            isValid.add(checkInputValidYear(promp, text));
             newMovie.setReleaseDate(text);
 
             promp = findViewById(R.id.promp_input_age_rated);
@@ -214,6 +214,23 @@ public class MovieFormActivity extends AppCompatActivity {
         } else {
             promp.setVisibility(View.GONE);
             return true;
+        }
+    }
+
+    private boolean checkInputValidYear(TextView promp, String text) {
+        try {
+            int movieCreatedYear = Integer.parseInt(text);
+
+            if (movieCreatedYear > 1850 && movieCreatedYear <= 2050) {
+                promp.setVisibility(View.GONE);
+                return true;
+            }
+
+            promp.setVisibility(View.VISIBLE);
+            return false;
+        } catch (NumberFormatException nfe) {
+            promp.setVisibility(View.VISIBLE);
+            return false;
         }
     }
 
