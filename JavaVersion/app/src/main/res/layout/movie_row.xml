@@ -32,47 +32,70 @@
                 app:srcCompat="@drawable/ic_launcher_background"
                 android:contentDescription="@string/image_view" />
 
-            <TextView
-                android:id="@+id/rv_score_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/movie_score"
-                app:layout_constraintStart_toStartOf="@+id/rv_img_view"
-                app:layout_constraintTop_toBottomOf="@+id/rv_img_view" />
-
             <ScrollView
                 android:id="@+id/rv_scroll_view"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="8dp"
+                android:layout_marginEnd="12dp"
                 android:fillViewport="true"
-                android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/rv_score_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/rv_title_view"
-                app:layout_constraintTop_toBottomOf="@+id/rv_title_view">
+                app:layout_constraintTop_toBottomOf="@+id/rv_title_view"
+                app:layout_constraintVertical_bias="0.018">
 
                 <TextView
                     android:id="@+id/rv_plot_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="6"
+                    android:maxLines="4"
                     android:text="@string/movie_plot" />
             </ScrollView>
 
             <TextView
                 android:id="@+id/rv_title_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/movie_title"
                 android:textSize="20sp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.051"
                 app:layout_constraintStart_toStartOf="@+id/rv_guideline"
                 app:layout_constraintTop_toTopOf="@+id/rv_img_view" />
+
+            <TextView
+                android:id="@+id/rv_score_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginHorizontal="12dp"
+                android:text="@string/movie_score"
+                app:layout_constraintStart_toStartOf="@+id/rv_img_view"
+                app:layout_constraintTop_toBottomOf="@+id/rv_img_view" />
+
+            <LinearLayout
+                android:id="@+id/genre_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_score_view">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipSpacing="2dp"
+                    app:singleLine="false"
+                    app:singleSelection="true" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/rv_divider"
@@ -81,7 +104,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_score_view" />
+                app:layout_constraintTop_toBottomOf="@+id/genre_row" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/rv_guideline"

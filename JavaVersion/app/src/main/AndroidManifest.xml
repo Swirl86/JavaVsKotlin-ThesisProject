@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JavaVersion">
         <activity
+            android:name=".MovieFormActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

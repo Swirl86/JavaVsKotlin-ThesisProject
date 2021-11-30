@@ -1,13 +1,29 @@
 <resources>
     <string name="app_name">JavaVersion</string>
+
+    <string name="movie_title_required">Movie Title <font color='#FF0000'>*</font></string>
+    <string name="movie_plot_required">Movie plot ✎ <font color='#FF0000'>*</font></string>
+    <string name="release_date_required">Release Date <font color='#FF0000'>*</font></string>
+    <string name="genre_s_required">Genre(s) <font color='#FF0000'>*</font></string>
+    <string name="score_required">Score 1–10  <font color='#FF0000'>*</font></string>
+
     <string name="movie_title">Movie Title</string>
     <string name="movie_plot">Movie plot ✎</string>
     <string name="movie_score">\u2b50 Score:</string>
-    <string name="prompt_enter_score">\u2b50 Score 1–10</string>
     <string name="image_view">Image View</string>
+    <string name="image_url">Image URL</string>
+
+    <string name="prompt_enter_movie_title">Enter Movie Title</string>
+    <string name="prompt_enter_release_date">Enter Release Date</string>
+    <string name="prompt_enter_image_url">Enter Image URL</string>
+    <string name="prompt_write_movie_plot">Write Movie Plot</string>
+    <string name="prompt_enter_score">\u2b50 Score 1–10 </string>
+    <string name="prompt_choose_age_rated">Choose Age Rated</string>
+    <string name="prompt_choose_genre_s">Choose Genre(s)</string>
 
 
     <string-array name="age_rate">
+        <item>Age rate *</item>
         <item>G – General Audiences</item>
         <item>PG – Parental Guidance Suggested</item>
         <item>PG-13 – Parents Strongly Cautioned</item>
