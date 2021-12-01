@@ -26,8 +26,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/filter_tabs_layout"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="4dp"
+            android:text="All"
+            android:id="@+id/filterByAll" />
 
         <Button
             android:layout_width="0dp"
@@ -35,8 +42,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:text="Title"
-            android:id="@+id/filterByTitle"
-            />
+            android:id="@+id/filterByTitle" />
 
         <Button
             android:layout_width="0dp"
@@ -44,8 +50,7 @@
             android:layout_height="match_parent"
             android:text="Prod.Year"
             android:layout_marginHorizontal="4dp"
-            android:id="@+id/filterByYear"
-            />
+            android:id="@+id/filterByYear" />
 
         <Button
             android:layout_width="0dp"
@@ -53,15 +58,13 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:text="Score"
-            android:id="@+id/filterByScore"
-            />
+            android:id="@+id/filterByScore" />
 
     </LinearLayout>
 
     <include
         android:id="@+id/empty_view"
-        layout="@layout/empty_database"
-    />
+        layout="@layout/empty_database" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

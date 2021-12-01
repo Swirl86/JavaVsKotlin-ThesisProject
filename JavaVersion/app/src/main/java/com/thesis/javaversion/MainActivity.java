@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -32,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ConstraintLayout emptyView;
+    private List<Movie> originalMovieList;
     private List<Movie> movieList;
     private RoomDB database;
     private MovieAdapter adapter;
     private Context context;
     private MovieAdapter.RecyclerViewClickListener listener;
 
-    private Button btnByTitle, btnByYear, btnByScore;
+    private Button btnByTitle, btnByYear, btnByScore, btnByAll;
 
     private FloatingActionButton movieFormBtn;
     private FloatingActionButton scrollUp;
@@ -101,18 +103,25 @@ public class MainActivity extends AppCompatActivity {
                 filterList("score");
             }
         });
+        btnByAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterList("all");
+            }
+        });
     }
 
     public void init() {
-        recyclerView = findViewById(R.id.recycler_view);
         setOnClickListener();
+        recyclerView = findViewById(R.id.recycler_view);
         emptyView = findViewById(R.id.empty_view);
-        movieList = new ArrayList<>();
 
         context = getApplicationContext();
         database = RoomDB.getInstance(context);
+        movieList = new ArrayList<>();
 
-        movieList = database.movieDao().getAll();
+        originalMovieList = database.movieDao().getAll();
+        movieList = new ArrayList<>(originalMovieList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -126,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         btnByTitle = findViewById(R.id.filterByTitle);
         btnByYear = findViewById(R.id.filterByYear);
         btnByScore = findViewById(R.id.filterByScore);
-
+        btnByAll = findViewById(R.id.filterByAll);
     }
 
     private void setOnClickListener() {
@@ -164,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0
     private void filterList(String filterOption) {
 
@@ -171,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Sort by...
         switch (filterOption) {
+            case "title":
+                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+                break;
             case "year":
                 filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getReleaseDate)).collect(Collectors.toList());
                 break;
@@ -178,14 +191,13 @@ public class MainActivity extends AppCompatActivity {
                 filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getScore).reversed()).collect(Collectors.toList());
                 break;
             default:
-                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+                filteredMovies = originalMovieList;
                 break;
         }
         movieList.clear();
         movieList.addAll(filteredMovies);
 
         adapter.notifyDataSetChanged();
-
     }
 
 }

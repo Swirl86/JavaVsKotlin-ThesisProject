@@ -87,10 +87,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     movieList.clear();
                     movieList.addAll( moviesMatchingGenre );
                     notifyDataSetChanged();
-
-                    // TODO - Keep the original list at all times. Maybe a button to go back to it? Fix code above! // 2021-11-30 15:35 CET
-
-
                 }
             });
 
