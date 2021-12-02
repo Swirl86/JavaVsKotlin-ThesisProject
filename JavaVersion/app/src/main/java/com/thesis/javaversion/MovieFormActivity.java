@@ -221,7 +221,7 @@ public class MovieFormActivity extends AppCompatActivity {
         try {
             int movieCreatedYear = Integer.parseInt(text);
 
-            if (movieCreatedYear > 1850 && movieCreatedYear <= 2050) {
+            if (movieCreatedYear > 1870 && movieCreatedYear <= 2050) {
                 promp.setVisibility(View.GONE);
                 return true;
             }

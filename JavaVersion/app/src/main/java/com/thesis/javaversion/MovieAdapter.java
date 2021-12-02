@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Movie movie = movieList.get(position);
@@ -57,9 +58,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         if(Utils.isNumeric(movieUrl)) { // Drawable no_img object number
             holder.img.setImageResource(R.drawable.no_img);
         } else {
-            Picasso.with(context).load(movie.getImgUrl()).into(holder.img);
-            // If no valid image add no_img from drawable
-            if(!Utils.hasImage(holder.img)) holder.img.setImageResource(R.drawable.no_img);
+            Picasso.with(context).load(movie.getImgUrl()).into(holder.img, new Callback() {
+                @Override
+                public void onSuccess() { }
+
+                @Override
+                public void onError() {
+                    // If no valid image add no_img from drawable
+                    holder.img.setImageResource(R.drawable.no_img);
+                }
+            });
         }
 
         String title = movie.getTitle() + " (" + movie.getReleaseDate() + ")";
@@ -80,9 +88,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     String chosenGenre = ((Chip) view).getText().toString();
-                    System.out.println( chosenGenre );
-
-                    List<Movie> moviesMatchingGenre = filteredMovieList.stream().filter(x -> x.getGenre().contains(chosenGenre)).collect(Collectors.toList());
+                    List<Movie> moviesMatchingGenre = filteredMovieList.stream()
+                            .filter(x -> x.getGenre().contains(chosenGenre))
+                            .collect(Collectors.toList());
 
                     movieList.clear();
                     movieList.addAll( moviesMatchingGenre );
@@ -129,7 +137,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private Filter movieFilter = new Filter() {
 
-        @RequiresApi(api = Build.VERSION_CODES.N)
+        @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
@@ -154,6 +162,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             return results;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             movieList.clear();

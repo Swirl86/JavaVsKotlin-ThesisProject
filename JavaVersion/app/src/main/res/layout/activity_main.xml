@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:text="All"
-            android:id="@+id/filterByAll" />
+            android:id="@+id/filterByAll"/>
 
         <Button
             android:layout_width="0dp"
@@ -42,7 +42,8 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:text="Title"
-            android:id="@+id/filterByTitle" />
+            android:id="@+id/filterByTitle"
+            app:backgroundTint="#b4b4b4" />
 
         <Button
             android:layout_width="0dp"
@@ -50,7 +51,8 @@
             android:layout_height="match_parent"
             android:text="Prod.Year"
             android:layout_marginHorizontal="4dp"
-            android:id="@+id/filterByYear" />
+            android:id="@+id/filterByYear"
+            app:backgroundTint="#b4b4b4" />
 
         <Button
             android:layout_width="0dp"
@@ -58,7 +60,8 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:text="Score"
-            android:id="@+id/filterByScore" />
+            android:id="@+id/filterByScore"
+            app:backgroundTint="#b4b4b4" />
 
     </LinearLayout>
 

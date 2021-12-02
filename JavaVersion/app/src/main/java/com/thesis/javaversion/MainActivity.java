@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,13 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.Filter;
 import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thesis.javaversion.database.RoomDB;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton movieFormBtn;
     private FloatingActionButton scrollUp;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    boolean titleFilterClick = false;
+    boolean yearFilterClick = false;
+    boolean scoreFilterClick = false;
+
+    @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,25 +93,28 @@ public class MainActivity extends AppCompatActivity {
         btnByTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterList("title");
+                filterList("title", titleFilterClick, btnByTitle);
+                titleFilterClick = !titleFilterClick;
             }
         });
         btnByYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterList("year");
+                filterList("year", yearFilterClick, btnByYear);
+                yearFilterClick = !yearFilterClick;
             }
         });
         btnByScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterList("score");
+                filterList("score", scoreFilterClick, btnByScore);
+                scoreFilterClick = !scoreFilterClick;
             }
         });
         btnByAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterList("all");
+                filterList("all", false, btnByAll);
             }
         });
     }
@@ -174,26 +182,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0
-    private void filterList(String filterOption) {
+    @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
+    private void filterList(String filterOption, boolean prevClicked, Button button) {
 
         List<Movie> filteredMovies = new ArrayList<>();
 
         // Sort by...
         switch (filterOption) {
             case "title":
-                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+                filteredMovies = movieList.stream()
+                        .sorted(Comparator.comparing(Movie::getTitle))
+                        .collect(Collectors.toList());
                 break;
             case "year":
-                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getReleaseDate)).collect(Collectors.toList());
+                filteredMovies = movieList.stream()
+                        .sorted(Comparator.comparing(Movie::getReleaseDate))
+                        .collect(Collectors.toList());
                 break;
             case "score":
-                filteredMovies = movieList.stream().sorted(Comparator.comparing(Movie::getScore).reversed()).collect(Collectors.toList());
+                filteredMovies = movieList.stream()
+                        .sorted(Comparator.comparing(Movie::getScore).reversed())
+                        .collect(Collectors.toList());
                 break;
             default:
                 filteredMovies = originalMovieList;
                 break;
         }
+
+        if(prevClicked && !filterOption.equals("all")) {
+            Collections.reverse(filteredMovies);
+            button.setBackgroundColor(Color.parseColor("#b4b4b4"));
+        } else if(!filterOption.equals("all")) {
+            button.setBackgroundColor(Color.parseColor("#8941ff"));
+        }
+
         movieList.clear();
         movieList.addAll(filteredMovies);
 

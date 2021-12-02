@@ -2,6 +2,7 @@ package com.thesis.javaversion;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.webkit.URLUtil;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import java.io.BufferedReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
