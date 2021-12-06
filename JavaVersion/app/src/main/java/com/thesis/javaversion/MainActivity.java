@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -36,20 +38,19 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout emptyView;
     private List<Movie> originalMovieList;
     private List<Movie> movieList;
-    private RoomDB database;
     private MovieAdapter adapter;
-    private Context context;
     private MovieAdapter.RecyclerViewClickListener listener;
+    private RoomDB database;
 
     private Button btnByTitle, btnByYear, btnByScore, btnByAll;
 
-    private FloatingActionButton movieFormBtn;
-    private FloatingActionButton scrollUp;
+    private FloatingActionButton movieFormBtn, scrollUp, deleteBtn;
 
     boolean titleFilterClick = false;
     boolean yearFilterClick = false;
     boolean scoreFilterClick = false;
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,50 +74,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        scrollUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(0);
-                scrollUp.setVisibility(View.GONE);
-            }
+        scrollUp.setOnClickListener(view -> {
+            recyclerView.smoothScrollToPosition(0);
+            scrollUp.setVisibility(View.GONE);
         });
 
-        movieFormBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MovieFormActivity.class);
-                startActivity(intent);
-            }
+        movieFormBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), MovieFormActivity.class);
+            startActivity(intent);
+        });
+
+        deleteBtn.setOnClickListener(view -> {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.delAllDb)
+                    .setMessage(R.string.delAllDbSure)
+
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        database.movieDao().deleteAll(movieList);
+                        movieList.clear();
+                        adapter.notifyDataSetChanged();
+                        emptyView.setVisibility(View.VISIBLE);
+                    })
+
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         });
 
         // Sort buttons
-        btnByTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterList("title", titleFilterClick, btnByTitle);
-                titleFilterClick = !titleFilterClick;
-            }
+        btnByTitle.setOnClickListener(view -> {
+            filterList("title", titleFilterClick, btnByTitle);
+            titleFilterClick = !titleFilterClick;
         });
-        btnByYear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterList("year", yearFilterClick, btnByYear);
-                yearFilterClick = !yearFilterClick;
-            }
+        btnByYear.setOnClickListener(view -> {
+            filterList("year", yearFilterClick, btnByYear);
+            yearFilterClick = !yearFilterClick;
         });
-        btnByScore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterList("score", scoreFilterClick, btnByScore);
-                scoreFilterClick = !scoreFilterClick;
-            }
+        btnByScore.setOnClickListener(view -> {
+            filterList("score", scoreFilterClick, btnByScore);
+            scoreFilterClick = !scoreFilterClick;
         });
-        btnByAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterList("all", false, btnByAll);
-            }
-        });
+        btnByAll.setOnClickListener(view -> filterList("all", false, btnByAll));
     }
 
     public void init() {
@@ -124,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         emptyView = findViewById(R.id.empty_view);
 
-        context = getApplicationContext();
+        Context context = getApplicationContext();
         database = RoomDB.getInstance(context);
         movieList = new ArrayList<>();
 
@@ -133,11 +131,12 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        adapter = new MovieAdapter(MainActivity.this, movieList, listener);
+        adapter = new MovieAdapter(MainActivity.this, movieList, listener, database);
         recyclerView.setAdapter(adapter);
 
         scrollUp = findViewById(R.id.scroll_up_main);
         movieFormBtn = findViewById(R.id.go_to_form_btn);
+        deleteBtn = findViewById(R.id.delete_all_btn);
 
         // Filter buttons
         btnByTitle = findViewById(R.id.filterByTitle);
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
     private void filterList(String filterOption, boolean prevClicked, Button button) {
 
-        List<Movie> filteredMovies = new ArrayList<>();
+        List<Movie> filteredMovies;
 
         // Sort by...
         switch (filterOption) {

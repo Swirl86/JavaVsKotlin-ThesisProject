@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
-    android:paddingTop="35dp"
+    android:paddingTop="10dp"
     android:id="@+id/no_object"
     android:visibility="gone">
 
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="\u2b50 Score: ?"
+                android:text="@string/no_score"
                 app:layout_constraintStart_toStartOf="@+id/no_object_img"
                 app:layout_constraintTop_toBottomOf="@+id/no_object_img" />
 
@@ -49,7 +49,7 @@
                 android:id="@+id/no_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No content to show"
+                android:text="@string/no_content_to_show"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/no_object_img"
                 app:layout_constraintEnd_toEndOf="parent"

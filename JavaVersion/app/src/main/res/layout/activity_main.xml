@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
-            android:text="All"
+            android:text="@string/btn_all"
             android:id="@+id/filterByAll"/>
 
         <Button
@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
-            android:text="Title"
+            android:text="@string/btn_title"
             android:id="@+id/filterByTitle"
             app:backgroundTint="#b4b4b4" />
 
@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Prod.Year"
+            android:text="@string/btn_prod_year"
             android:layout_marginHorizontal="4dp"
             android:id="@+id/filterByYear"
             app:backgroundTint="#b4b4b4" />
@@ -59,15 +59,23 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
-            android:text="Score"
+            android:text="@string/btn_score"
             android:id="@+id/filterByScore"
             app:backgroundTint="#b4b4b4" />
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/empty_view"
-        layout="@layout/empty_database" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_tabs_layout">
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_database" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -85,9 +93,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_margin="16dp"
-        android:contentDescription="New Movie"
+        android:contentDescription="@string/btn_new_movie"
         android:src="@drawable/ic_add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_all_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/btn_new_movie"
+        android:src="@drawable/ic_delete"
+        app:backgroundTint="@color/danger"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <View

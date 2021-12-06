@@ -18,21 +18,13 @@ public interface MovieDao {
     @Insert(onConflict = REPLACE)
     void insert(Movie movie);
 
-    // Delete query
-    @Delete
-    void delete(Movie movie);
-
     // Delete all query
     @Delete
-    void reset(List<Movie> movie);
+    void deleteAll(List<Movie> movie);
 
-    @Update
-    public void update(Movie... movies);
-
-   /* // Update query
-    @Query("UPDATE movie_table SET plot = :sText WHERE ID = :sID")
-    void update(int sID, String sText);*/
-
+   // Delete query
+    @Delete
+    void delete(Movie movie);
 
     // Get all query
     @Query("SELECT * FROM movie_table")

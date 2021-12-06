@@ -14,7 +14,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
@@ -24,7 +24,7 @@
                 android:id="@+id/promp_input_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:text="@string/prompt_enter_movie_title"
                 android:textColor="#ff0f0f"
                 android:textSize="18sp"
@@ -193,23 +193,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Back"
+                android:text="@string/btn_back"
                 app:backgroundTint="@color/danger"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_plot" />
-
-            <!-- <Button
-             android:id="@+id/clear_btn"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginHorizontal="8dp"
-             android:layout_marginTop="16dp"
-             android:text="Clear"
-             android:backgroundTint="@color/warning"
-             app:layout_constraintEnd_toStartOf="@id/submit_btn"
-             app:layout_constraintStart_toEndOf="@+id/back_btn"
-             app:layout_constraintTop_toBottomOf="@+id/input_plot" /> -->
-
 
             <Button
                 android:id="@+id/submit_btn"
@@ -218,7 +205,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/success"
-                android:text="Submit"
+                android:text="@string/btn_submit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_plot" />
 

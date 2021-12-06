@@ -40,20 +40,12 @@ public class MovieFormActivity extends AppCompatActivity {
 
         submitBtn.setOnClickListener(submitMovieFormListener);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        backBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         });
 
-        genreView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGenreDialog();
-            }
-        });
+        genreView.setOnClickListener(v -> showGenreDialog());
     }
 
     public void init() {
@@ -82,50 +74,36 @@ public class MovieFormActivity extends AppCompatActivity {
         AlertDialog.Builder genreBuilder = new AlertDialog.Builder(this);
         genreBuilder.setTitle("Choose Genre(s)");
 
-        genreBuilder.setMultiChoiceItems(genreArray, selectedGenres, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i, boolean checked) {
-                if (checked) {
-                    selectedGenreList.add(i);
-                    Collections.sort(selectedGenreList);
-                } else {
-                    selectedGenreList.remove(i);
-                }
+        genreBuilder.setMultiChoiceItems(genreArray, selectedGenres, (dialogInterface, i, checked) -> {
+            if (checked) {
+                selectedGenreList.add(i);
+                Collections.sort(selectedGenreList);
+            } else {
+                selectedGenreList.remove(i);
             }
         });
 
-        genreBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int j = 0; j < selectedGenreList.size(); j++) {
+        genreBuilder.setPositiveButton("OK", (dialogInterface, i) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int j = 0; j < selectedGenreList.size(); j++) {
 
-                    stringBuilder.append(genreArray[selectedGenreList.get(j)]);
+                stringBuilder.append(genreArray[selectedGenreList.get(j)]);
 
-                    if (j != selectedGenreList.size() - 1) {
-                        stringBuilder.append(", ");
-                    }
+                if (j != selectedGenreList.size() - 1) {
+                    stringBuilder.append(", ");
                 }
-                genreView.setText(stringBuilder.toString());
             }
+            genreView.setText(stringBuilder.toString());
         });
 
-        genreBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+        genreBuilder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
-        genreBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (int j = 0; j < selectedGenreList.size(); j++) {
-                    selectedGenres[j] = false;
-                }
-                selectedGenreList.clear();
-                genreView.setText("");
+        genreBuilder.setNeutralButton("Clear all", (dialogInterface, i) -> {
+            for (int j = 0; j < selectedGenreList.size(); j++) {
+                selectedGenres[j] = false;
             }
+            selectedGenreList.clear();
+            genreView.setText("");
         });
 
         AlertDialog dialog = genreBuilder.create();
@@ -160,7 +138,7 @@ public class MovieFormActivity extends AppCompatActivity {
             promp = findViewById(R.id.promp_input_genre);
             text = genreView.getText().toString();
             isValid.add(checkInput(promp, text));
-            newMovie.setGenre(new ArrayList<String>(Arrays.asList(text.split(", "))));
+            newMovie.setGenre(new ArrayList<>(Arrays.asList(text.split(", "))));
 
             promp = findViewById(R.id.promp_input_score);
             input = findViewById(R.id.input_score);

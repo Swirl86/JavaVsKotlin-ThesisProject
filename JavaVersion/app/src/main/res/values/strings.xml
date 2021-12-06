@@ -21,6 +21,21 @@
     <string name="prompt_choose_age_rated">Choose Age Rated</string>
     <string name="prompt_choose_genre_s">Choose Genre(s)</string>
 
+    <string name="btn_all">All</string>
+    <string name="btn_title">Title</string>
+    <string name="btn_prod_year">Prod.Year</string>
+    <string name="btn_score">Score</string>
+    <string name="btn_new_movie">New Movie</string>
+    <string name="no_content_to_show">No content to show</string>
+    <string name="no_score">⭐ Score: ?</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_submit">Submit</string>
+
+    <string name="delAllDb">Delete ENTIRE database?</string>
+    <string name="delAllDbSure">Are you sure you want to delete everything?</string>
+    <string name="delSpecDb">Delete this entry?</string>
+    <string name="delSpecDbSure">Are you sure you want to delete this entry?"</string>
+
 
     <string-array name="age_rate">
         <item>Age rate *</item>

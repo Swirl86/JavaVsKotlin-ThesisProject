@@ -65,6 +65,14 @@
                 app:layout_constraintStart_toStartOf="@+id/rv_guideline"
                 app:layout_constraintTop_toTopOf="@+id/rv_img_view" />
 
+            <ImageButton
+                android:id="@+id/rv_delete_btn"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/rv_score_view"
                 android:layout_width="match_parent"

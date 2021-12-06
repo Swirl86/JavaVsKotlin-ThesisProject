@@ -2,6 +2,8 @@ package com.thesis.javaversion;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,17 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.thesis.javaversion.database.RoomDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +38,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private List<Movie> filteredMovieList;
     private Activity context;
     private RecyclerViewClickListener listener;
+    private RoomDB database;
 
-    public MovieAdapter(Activity context, List<Movie> movieList, RecyclerViewClickListener listener) {
+    public MovieAdapter(Activity context, List<Movie> movieList, RecyclerViewClickListener listener, RoomDB database) {
         this.movieList = movieList;
         this.listener = listener;
         this.context = context;
         this.filteredMovieList = new ArrayList<>(movieList);
+        this.database = database;
     }
 
     @NonNull
@@ -49,6 +56,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -83,24 +91,39 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             chip.setText(genre);
             chip.setChipBackgroundColor(ColorStateList.valueOf(getRandomColor()));
 
-            chip.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("NotifyDataSetChanged")
-                @Override
-                public void onClick(View view) {
-                    String chosenGenre = ((Chip) view).getText().toString();
-                    List<Movie> moviesMatchingGenre = filteredMovieList.stream()
-                            .filter(x -> x.getGenre().contains(chosenGenre))
-                            .collect(Collectors.toList());
+            chip.setOnClickListener(view -> {
+                String chosenGenre = ((Chip) view).getText().toString();
+                List<Movie> moviesMatchingGenre = filteredMovieList.stream()
+                        .filter(x -> x.getGenre().contains(chosenGenre))
+                        .collect(Collectors.toList());
 
-                    movieList.clear();
-                    movieList.addAll( moviesMatchingGenre );
-                    notifyDataSetChanged();
-                }
+                movieList.clear();
+                movieList.addAll( moviesMatchingGenre );
+                notifyDataSetChanged();
             });
 
             holder.genresLayout.addView(chip);
         }
+
+        holder.deleteBtn.setOnClickListener(view -> {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.delSpecDb)
+                    .setMessage(R.string.delSpecDbSure)
+
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        database.movieDao().delete(movieList.get(position));
+                        movieList = database.movieDao().getAll();
+                        notifyDataSetChanged();
+                        ((Activity)context).recreate(); // Reset start state
+                    })
+
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+
     }
+
 
     public  String getStars(int score) {
         StringBuilder stars = new StringBuilder();
@@ -141,9 +164,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
-            List<Movie> filteredList = new ArrayList<>();
+            List<Movie> filteredList;
             if(charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(filteredMovieList);
+                filteredList = new ArrayList<>(filteredMovieList);
             } else {
                 String filterPattern = charSequence.toString().trim().toLowerCase();
 
@@ -176,6 +199,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         ImageView img;
         TextView title, plot, score;
         ChipGroup genresLayout;
+        ImageButton deleteBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -184,6 +208,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             plot = itemView.findViewById(R.id.rv_plot_view);
             score = itemView.findViewById(R.id.rv_score_view);
             genresLayout = (ChipGroup) itemView.findViewById(R.id.chip_group);
+            deleteBtn = itemView.findViewById(R.id.rv_delete_btn);
         }
     }
     public interface RecyclerViewClickListener {
