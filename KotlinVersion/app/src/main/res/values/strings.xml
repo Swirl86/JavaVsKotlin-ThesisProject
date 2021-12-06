@@ -1,3 +1,65 @@
 <resources>
     <string name="app_name">KotlinVersion</string>
+
+    <string name="movie_title_required">Movie Title <font color='#FF0000'>*</font></string>
+    <string name="movie_plot_required">Movie plot ✎ <font color='#FF0000'>*</font></string>
+    <string name="release_date_required">Release Year <font color='#FF0000'>*</font></string>
+    <string name="genre_s_required">Genre(s) <font color='#FF0000'>*</font></string>
+    <string name="score_required">Score 1–10  <font color='#FF0000'>*</font></string>
+
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_plot">Movie plot ✎</string>
+    <string name="movie_score">\u2b50 Score:</string>
+    <string name="image_view">Image View</string>
+    <string name="image_url">Image URL</string>
+
+    <string name="prompt_enter_movie_title">Enter Movie Title</string>
+    <string name="prompt_enter_release_date">Enter Release Year</string>
+    <string name="prompt_enter_image_url">Enter Image URL</string>
+    <string name="prompt_write_movie_plot">Write Movie Plot</string>
+    <string name="prompt_enter_score">\u2b50 Score 1–10 </string>
+    <string name="prompt_choose_age_rated">Choose Age Rated</string>
+    <string name="prompt_choose_genre_s">Choose Genre(s)</string>
+
+    <string name="btn_all">All</string>
+    <string name="btn_title">Title</string>
+    <string name="btn_prod_year">Prod.Year</string>
+    <string name="btn_score">Score</string>
+    <string name="btn_new_movie">New Movie</string>
+    <string name="no_content_to_show">No content to show</string>
+    <string name="no_score">⭐ Score: ?</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_submit">Submit</string>
+
+    <string name="delAllDb">Delete ENTIRE database?</string>
+    <string name="delAllDbSure">Are you sure you want to delete everything?</string>
+    <string name="delSpecDb">Delete this entry?</string>
+    <string name="delSpecDbSure">Are you sure you want to delete this entry?"</string>
+
+
+    <string-array name="age_rate">
+        <item>Age rate *</item>
+        <item>G – General Audiences</item>
+        <item>PG – Parental Guidance Suggested</item>
+        <item>PG-13 – Parents Strongly Cautioned</item>
+        <item>R – Restricted</item>
+        <item>NC-17 – Adults Only</item>
+    </string-array>
+
+    <string-array name="genre">
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Animation</item>
+        <item>Comedy</item>
+        <item>Documentary</item>
+        <item>Fantasy</item>
+        <item>Horror</item>
+        <item>Musical</item>
+        <item>Romance</item>
+        <item>Sci-Fi</item>
+        <item>Thriller</item>
+        <item>Western</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>
