@@ -33,7 +33,7 @@ class MovieFormActivity : AppCompatActivity() {
         genreView!!.setOnClickListener { v: View? -> showGenreDialog() }
     }
 
-    fun init() {
+    private fun init() {
         val context = applicationContext
         database = getInstance(context)
         backBtn = findViewById(R.id.back_btn)
@@ -95,33 +95,34 @@ class MovieFormActivity : AppCompatActivity() {
         var promp = findViewById<TextView>(R.id.promp_input_title)
         var input = findViewById<EditText>(R.id.input_title)
         var text = input.text.toString()
-        isValid.add(checkInput(promp, text))
+        isValid.add(checkInput(promp, text, "textInput"))
         newMovie.title = text
         promp = findViewById(R.id.promp_input_date)
         input = findViewById(R.id.input_release_date)
         text = input.text.toString()
-        isValid.add(checkInputValidYear(promp, text))
+        isValid.add(checkInput(promp, text, "yearInput"))
         newMovie.releaseDate = text
         promp = findViewById(R.id.promp_input_age_rated)
         text = ageRatedSpinner!!.selectedItem.toString()
-        isValid.add(checkAgeRateInput(promp, text))
+        isValid.add(checkInput(promp, text, "ageInput"))
         newMovie.ageRated = text
         promp = findViewById(R.id.promp_input_genre)
         text = genreView!!.text.toString()
-        isValid.add(checkInput(promp, text))
+        isValid.add(checkInput(promp, text, "textInput"))
         newMovie.genre = ArrayList(Arrays.asList(*text.split(", ").toTypedArray()))
         promp = findViewById(R.id.promp_input_score)
         input = findViewById(R.id.input_score)
         text = input.text.toString()
-        isValid.add(validScore(promp, text, newMovie))
+        isValid.add(checkInput(promp, text, newMovie))
         input = findViewById(R.id.input_img_url)
         text = input.text.toString()
-        if (isValidUrl(text)) newMovie.imgUrl = text else newMovie.imgUrl = R.drawable.no_img.toString()
+        if (isValidUrl(text)) newMovie.imgUrl = text else newMovie.imgUrl =
+            R.drawable.no_img.toString()
 
         promp = findViewById(R.id.promp_input_plot)
         input = findViewById(R.id.input_plot)
         text = input.text.toString()
-        isValid.add(checkInput(promp, text))
+        isValid.add(checkInput(promp, text, "textInput"))
         newMovie.plot = text
         if (!isValid.contains(false)) {
             database!!.movieDao()!!.insert(newMovie)
@@ -130,7 +131,7 @@ class MovieFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun validScore(promp: TextView, text: String, movie: Movie): Boolean {
+    private fun checkInput(promp: TextView, text: String, movie: Movie): Boolean {
         return try {
             val score = text.toInt()
             if (score in 1..10) {
@@ -146,39 +147,43 @@ class MovieFormActivity : AppCompatActivity() {
         }
     }
 
-    // TODO - Merge methods below <---
-    private fun checkInput(promp: TextView, text: String): Boolean {
-        return if (text == "") {
-            promp.visibility = View.VISIBLE
-            false
-        } else {
-            promp.visibility = View.GONE
-            true
-        }
-    }
-
-    private fun checkInputValidYear(promp: TextView, text: String): Boolean {
-        return try {
-            val movieCreatedYear = text.toInt()
-            if (movieCreatedYear in 1871..2050) {
-                promp.visibility = View.GONE
-                return true
+    private fun checkInput(promp: TextView, text: String, type: String): Boolean {
+        when (type) {
+            "textInput" -> {
+                return if (text == "") {
+                    promp.visibility = View.VISIBLE
+                    false
+                } else {
+                    promp.visibility = View.GONE
+                    true
+                }
             }
-            promp.visibility = View.VISIBLE
-            false
-        } catch (nfe: NumberFormatException) {
-            promp.visibility = View.VISIBLE
-            false
+            "yearInput" -> {
+                return try {
+                    val movieCreatedYear = text.toInt()
+                    if (movieCreatedYear in 1871..2050) {
+                        promp.visibility = View.GONE
+                        return true
+                    }
+                    promp.visibility = View.VISIBLE
+                    false
+                } catch (nfe: NumberFormatException) {
+                    promp.visibility = View.VISIBLE
+                    false
+                }
+            }
+            "ageInput" -> {
+                return if (text == "Age rate *") {
+                    promp.visibility = View.VISIBLE
+                    false
+                } else {
+                    promp.visibility = View.GONE
+                    true
+                }
+            }
+            else -> return false
         }
     }
 
-    private fun checkAgeRateInput(promp: TextView, text: String): Boolean {
-        return if (text == "Age rate *") {
-            promp.visibility = View.VISIBLE
-            false
-        } else {
-            promp.visibility = View.GONE
-            true
-        }
-    }
+
 }

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.thesis.javaversion.database.RoomDB;
@@ -121,33 +122,33 @@ public class MovieFormActivity extends AppCompatActivity {
             TextView promp = findViewById(R.id.promp_input_title);
             EditText input = findViewById(R.id.input_title);
             String text = input.getText().toString();
-            isValid.add(checkInput(promp, text));
+            isValid.add(checkInput(promp, text, "textInput"));
             newMovie.setTitle(text);
 
             promp = findViewById(R.id.promp_input_date);
             input = findViewById(R.id.input_release_date);
             text = input.getText().toString();
-            isValid.add(checkInputValidYear(promp, text));
+            isValid.add(checkInput(promp, text, "yearInput"));
             newMovie.setReleaseDate(text);
 
             promp = findViewById(R.id.promp_input_age_rated);
             text = ageRatedSpinner.getSelectedItem().toString();
-            isValid.add(checkAgeRateInput(promp, text));
+            isValid.add(checkInput(promp, text, "ageInput"));
             newMovie.setAgeRated(text);
 
             promp = findViewById(R.id.promp_input_genre);
             text = genreView.getText().toString();
-            isValid.add(checkInput(promp, text));
+            isValid.add(checkInput(promp, text, "textInput"));
             newMovie.setGenre(new ArrayList<>(Arrays.asList(text.split(", "))));
 
             promp = findViewById(R.id.promp_input_score);
             input = findViewById(R.id.input_score);
             text = input.getText().toString();
-            isValid.add(validScore(promp, text, newMovie));
+            isValid.add(checkInput(promp, text, newMovie));
 
             input = findViewById(R.id.input_img_url);
             text = input.getText().toString();
-            if(Utils.IsValidUrl(text)) {
+            if (Utils.IsValidUrl(text)) {
                 newMovie.setImgUrl(text);
             } else {
                 newMovie.setImgUrl(String.valueOf(R.drawable.no_img));
@@ -156,18 +157,18 @@ public class MovieFormActivity extends AppCompatActivity {
             promp = findViewById(R.id.promp_input_plot);
             input = findViewById(R.id.input_plot);
             text = input.getText().toString();
-            isValid.add(checkInput(promp, text));
+            isValid.add(checkInput(promp, text, "textInput"));
             newMovie.setPlot(text);
 
             if (!isValid.contains(false)) {
-              database.movieDao().insert(newMovie);
-              Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-              startActivity(intent);
+                database.movieDao().insert(newMovie);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         }
     };
 
-    private boolean validScore(TextView promp, String text, Movie movie) {
+    private boolean checkInput(TextView promp, String text, Movie movie) {
         try {
             int score = Integer.parseInt(text);
 
@@ -185,40 +186,44 @@ public class MovieFormActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkInput(TextView promp, String text) {
-        if (text.equals("")) {
-            promp.setVisibility(View.VISIBLE);
-            return false;
-        } else {
-            promp.setVisibility(View.GONE);
-            return true;
+    private boolean checkInput(TextView promp, String text, String type) {
+
+        switch (type) {
+            case "textInput":
+                if (text.equals("")) {
+                    promp.setVisibility(View.VISIBLE);
+                    return false;
+                } else {
+                    promp.setVisibility(View.GONE);
+                    return true;
+                }
+            case "yearInput":
+                try {
+                    int movieCreatedYear = Integer.parseInt(text);
+
+                    if (movieCreatedYear > 1870 && movieCreatedYear <= 2050) {
+                        promp.setVisibility(View.GONE);
+                        return true;
+                    }
+
+                    promp.setVisibility(View.VISIBLE);
+                    return false;
+                } catch (NumberFormatException nfe) {
+                    promp.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            case "ageInput":
+                if (text.equals("Age rate *")) {
+                    promp.setVisibility(View.VISIBLE);
+                    return false;
+                } else {
+                    promp.setVisibility(View.GONE);
+                    return true;
+                }
+            default:
+                return false;
         }
+
     }
 
-    private boolean checkInputValidYear(TextView promp, String text) {
-        try {
-            int movieCreatedYear = Integer.parseInt(text);
-
-            if (movieCreatedYear > 1870 && movieCreatedYear <= 2050) {
-                promp.setVisibility(View.GONE);
-                return true;
-            }
-
-            promp.setVisibility(View.VISIBLE);
-            return false;
-        } catch (NumberFormatException nfe) {
-            promp.setVisibility(View.VISIBLE);
-            return false;
-        }
-    }
-
-    private boolean checkAgeRateInput(TextView promp, String text) {
-        if (text.equals("Age rate *")) {
-            promp.setVisibility(View.VISIBLE);
-            return false;
-        } else {
-            promp.setVisibility(View.GONE);
-            return true;
-        }
-    }
 }

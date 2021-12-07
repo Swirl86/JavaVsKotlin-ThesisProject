@@ -174,28 +174,4 @@ class MainActivity : AppCompatActivity() {
             adapter!!.notifyDataSetChanged()
         }
     }
-
-    /*
-    private fun filterList(filterOption: String, prevClicked: Boolean, button: Button?) {
-        val filteredMovies: List<Movie?>? = when (filterOption) {
-            "title" -> movieList!!
-                .sortedBy{ it?.title }
-            "year" -> movieList!!
-                .sortedBy{ it?.releaseDate }
-            "score" -> movieList!!
-                .sortedBy{ it?.score }
-            else -> originalMovieList
-        }
-        if (prevClicked && filterOption != "all") {
-            filteredMovies?.toMutableList()?.reverse()
-            button!!.setBackgroundColor(Color.parseColor("#b4b4b4"))
-        } else if (filterOption != "all") {
-            button!!.setBackgroundColor(Color.parseColor("#8941ff"))
-        }
-        movieList!!.clear()
-        movieList!!.addAll(filteredMovies!!)
-        adapter!!.notifyDataSetChanged()
-    }
-
-     */
 }
