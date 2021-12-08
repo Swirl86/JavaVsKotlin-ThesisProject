@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
         database = RoomDB.getInstance(context);
+        addDummies();
         movieList = new ArrayList<>();
 
         originalMovieList = database.movieDao().getAll();
@@ -219,6 +220,40 @@ public class MainActivity extends AppCompatActivity {
         movieList.addAll(filteredMovies);
 
         adapter.notifyDataSetChanged();
+    }
+
+    private void addDummies(){
+        Movie movie = new Movie();
+
+        movie.setTitle("Gummi Bears");
+        ArrayList<String> myListGenre = new ArrayList<>();
+        myListGenre.add("Animation");
+        movie.setGenre(myListGenre);
+        movie.setReleaseDate("1989");
+        movie.setAgeRated("G – General Audiences");
+        movie.setScore(5);
+        movie.setImgUrl("123");
+        movie.setPlot("Some bears jumping around, making fun");
+
+        Movie movie2 = new Movie();
+
+        movie2.setTitle("Kindergarden cop");
+        ArrayList<String> myListGenre2 = new ArrayList<>();
+        myListGenre2.add("Comedy");
+        movie2.setGenre(myListGenre2);
+        movie2.setReleaseDate("1994");
+        movie2.setAgeRated("PG – Parental Guidance Suggested");
+        movie2.setScore(6);
+        movie2.setImgUrl("123");
+        movie2.setPlot("a funny cop enters your school");
+
+        for(int i = 0; i < 50; i++){
+
+            database.movieDao().insert(movie);
+            database.movieDao().insert(movie2);
+        }
+
+
     }
 
 }

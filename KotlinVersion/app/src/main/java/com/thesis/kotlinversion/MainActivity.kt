@@ -104,6 +104,8 @@ class MainActivity : AppCompatActivity() {
         emptyView = findViewById(R.id.empty_view)
         val context = applicationContext
         database = getInstance(context)
+
+        addDummies()
         originalMovieList = database!!.movieDao()!!.all
         movieList = originalMovieList?.toMutableList()
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -174,4 +176,38 @@ class MainActivity : AppCompatActivity() {
             adapter!!.notifyDataSetChanged()
         }
     }
+
+    private fun addDummies(){
+        var movie: Movie = Movie()
+
+        movie.title = "Gummi Bears"
+        var myListGenre = arrayListOf<String>()
+        myListGenre.add("Animation")
+        movie.genre = myListGenre
+        movie.releaseDate = "1989"
+        movie.ageRated = "G – General Audiences"
+        movie.score = 5
+        movie.imgUrl = "123"
+        movie.plot = "Some bears jumping around, making fun"
+
+        var movie2: Movie = Movie()
+
+        movie2.title = "Kindergarden cop"
+        var myListGenre2 = arrayListOf<String>()
+        myListGenre2.add("Comedy")
+        movie2.genre = myListGenre2
+        movie2.releaseDate = "1994"
+        movie2.ageRated = "PG – Parental Guidance Suggested"
+        movie2.score = 6
+        movie2.imgUrl = "123"
+        movie2.plot = "a funny cop enters your school"
+
+        (0..50).forEach{
+            database?.movieDao()?.insert(movie)
+            database?.movieDao()?.insert(movie2)
+        }
+
+
+    }
+
 }

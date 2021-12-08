@@ -132,6 +132,9 @@ class MovieAdapter(
     private val movieFilter: Filter = object : Filter() {
         @RequiresApi(api = Build.VERSION_CODES.N) //Req android 7.0 or higher
         override fun performFiltering(charSequence: CharSequence): FilterResults {
+
+            val startTT = System.nanoTime()
+
             var filteredList: MutableList<Movie>? = ArrayList()
                 if (charSequence.isEmpty()) {
                     filteredList?.addAll(filteredMovieList as Collection<Movie>)
@@ -149,6 +152,10 @@ class MovieAdapter(
             }
             val results = FilterResults()
             results.values = filteredList
+
+            val endTT = System.nanoTime()
+            println(" time : ${endTT-startTT}")
+
             return results
         }
 

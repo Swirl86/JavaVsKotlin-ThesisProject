@@ -164,6 +164,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
+            long startTT = System.nanoTime();
+
             List<Movie> filteredList;
             if(charSequence == null || charSequence.length() == 0) {
                 filteredList = new ArrayList<>(filteredMovieList);
@@ -181,6 +183,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             FilterResults results = new FilterResults();
             results.values = filteredList;
+
+            long endTT = System.nanoTime();
+            System.out.println(endTT - startTT);
 
             return results;
         }
